@@ -58,20 +58,27 @@ class TasksController extends Controller
     public function show($id)
     {
         $task = Task::find($id);
-        
-        return view("tasks.show", [
-                "task" => $task,
-        ]);
+        if (\Auth::user()->id === $task->user_id) {
+            return view("tasks.show", [
+                    "task" => $task,
+            ]);
+        }
+        else {
+            return redirect("tasks/");
+        }
     }
     
     //getでtasks/id/editにアクセスされた場合の「更新画面表示処理」
     public function edit($id)
     {
         $task = Task::find($id);
-        
-        return view("tasks.edit", [
+        if (\Auth::user()->id === $task->user_id) {
+            return view("tasks.edit", [
                 "task" => $task,
             ]);
+        } else {
+            return redirect("tasks/");
+        }
     }
     
     //putまたはpatchでtasks/idにアクセスされた場合の「更新処理」
